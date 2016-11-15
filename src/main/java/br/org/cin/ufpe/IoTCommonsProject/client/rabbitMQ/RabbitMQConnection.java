@@ -1,3 +1,5 @@
+package br.org.cin.ufpe.IoTCommonsProject.client.rabbitMQ;
+
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -10,23 +12,15 @@ import br.org.cin.ufpe.IoTCommonsProject.parser.ParserJson;
 
 public class RabbitMQConnection {
 
-	private Connection connection;
-	private Channel channel;
-	private String requestQueueName = "rpc_queue";
-	private String replyQueueName;
-	private QueueingConsumer consumer;
-	
 	private Thread subscribeThread;
 	private ConnectionFactory factory;
 	private ServiceAddress address;
 
 	private static final String EXCHANGE = "amq.direct";
 	private static final String ROUTING_KEY = "si.test.queue";
-	private static final String uri = "amqp://192.168.0.134:5672";
 
-	public RabbitMQConnection() {
-		setupConnectionFactory();
-		setupRPC();
+	public RabbitMQConnection(ConnectionFactory factory) {
+		this.factory = factory;
 	}
 
 	public void stopThread() {
@@ -35,27 +29,6 @@ public class RabbitMQConnection {
 		}
 	}
 
-	private void setupConnectionFactory() {
-
-		this.factory = new ConnectionFactory();
-		this.factory.setUsername("vhostuser");
-		this.factory.setPassword("123456");
-		this.factory.setUri(uri);
-	}
-
-	public void setupRPC(){
-		
-		ConnectionFactory factory = new ConnectionFactory();
-	    factory.setHost("localhost");
-	    connection = factory.newConnection();
-	    channel = connection.createChannel();
-
-	    replyQueueName = channel.queueDeclare().getQueue(); 
-	    consumer = new QueueingConsumer(channel);
-	    channel.basicConsume(replyQueueName, true, consumer);
-	    
-	}
-	
 	public void subscribe(final SubscriptionListener listener) {
 
 		this.subscribeThread = new Thread(new Runnable() {

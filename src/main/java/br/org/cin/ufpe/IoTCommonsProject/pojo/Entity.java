@@ -1,8 +1,11 @@
 package br.org.cin.ufpe.IoTCommonsProject.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Entity {
+public class Entity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String type;
 	private List<Attributes> attributes;
