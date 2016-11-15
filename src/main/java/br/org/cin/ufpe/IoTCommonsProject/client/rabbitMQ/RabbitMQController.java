@@ -1,20 +1,26 @@
 package br.org.cin.ufpe.IoTCommonsProject.client.rabbitMQ;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.ConnectionFactory;
 
 import br.org.cin.ufpe.IoTCommonsProject.listener.SubscriptionListener;
+import br.org.cin.ufpe.IoTCommonsProject.pojo.Entity;
+import br.org.cin.ufpe.IoTCommonsProject.pojo.Response;
 
 public class RabbitMQController {
 
 	private RabbitMQConnection connection;
 	private String queuName;
+	private String rpcQueue;
 	private ConnectionFactory factory;
+	private RabbitMQRPCClient rpcController;
 
-	public RabbitMQController() {
+	public RabbitMQController(String queueName, String rpcQueue) throws IOException, TimeoutException {
 
 		this.factory = new ConnectionFactory();
 		this.factory.setUsername("vhostuser");
@@ -33,12 +39,11 @@ public class RabbitMQController {
 			e.printStackTrace();
 		}
 
-		this.connection = new RabbitMQConnection(this.factory);
-	}
-
-	public RabbitMQController(String queuName) {
-		this();
 		this.queuName = queuName;
+		this.rpcQueue = rpcQueue;
+		this.connection = new RabbitMQConnection(this.factory);
+		this.rpcController = new RabbitMQRPCClient(this.factory);
+
 	}
 
 	public void subscribe(final SubscriptionListener listener) {
@@ -50,8 +55,10 @@ public class RabbitMQController {
 		// Split by QUEUE
 	}
 
-	public void register() {
-		// Assign the device using.
+	public Response register(Entity entity) throws Exception {
+		Response response = this.rpcController.register(entity);
+		this.rpcController.close();
+		return response;
 	}
 
 }

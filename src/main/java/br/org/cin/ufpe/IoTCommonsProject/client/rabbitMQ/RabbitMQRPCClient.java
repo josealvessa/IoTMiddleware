@@ -35,7 +35,7 @@ public class RabbitMQRPCClient {
 		this.channel.basicConsume(this.replyQueueName, true, this.consumer);
 	}
 
-	public Response call(Entity message) throws Exception {
+	public Response register(Entity message) throws Exception {
 
 		Response response = null;
 		String corrId = java.util.UUID.randomUUID().toString();

@@ -24,4 +24,11 @@ public class Response implements Serializable {
 		this.message = message;
 	}
 
+	public static Response getSuccessResponse() {
+		Response response = new Response();
+		response.setStatus(200);
+		response.setMessage("Success");
+
+		return response;
+	}
 }
