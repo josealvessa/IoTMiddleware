@@ -9,7 +9,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-import br.org.cin.ufpe.IoTCommonsProject.pojo.Entity;
+import br.org.cin.ufpe.IoTCommonsProject.common.Constants;
+import br.org.cin.ufpe.IoTCommonsProject.naming.model.Request;
+import br.org.cin.ufpe.IoTCommonsProject.naming.model.ServiceAddress;
+import br.org.cin.ufpe.IoTCommonsProject.pojo.ConnectionUtil;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Marshaller;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Response;
 
@@ -22,8 +25,9 @@ public class RabbitMQRPCClient {
 	private QueueingConsumer consumer;
 	private ConnectionFactory factory;
 
-	public RabbitMQRPCClient(ConnectionFactory factory) throws IOException, TimeoutException {
-		this.factory = factory;
+	public RabbitMQRPCClient(ServiceAddress address) throws IOException, TimeoutException {
+		this.factory = ConnectionUtil.getConnectionFactory(address);
+		this.requestQueueName = address.getExtras().get(Constants.QUEUE_NAME);
 		setupRPC();
 	}
 
@@ -35,15 +39,15 @@ public class RabbitMQRPCClient {
 		this.channel.basicConsume(this.replyQueueName, true, this.consumer);
 	}
 
-	public Response register(Entity message) throws Exception {
+	public Response register(Request request) throws Exception {
 
 		Response response = null;
 		String corrId = java.util.UUID.randomUUID().toString();
 
 		BasicProperties props = new BasicProperties.Builder().correlationId(corrId).replyTo(replyQueueName).build();
 
-		Marshaller<Entity> marshaller = new Marshaller<Entity>();
-		channel.basicPublish("", requestQueueName, props, marshaller.marshall(message));
+		Marshaller<Request> marshaller = new Marshaller<Request>();
+		channel.basicPublish("", requestQueueName, props, marshaller.marshall(request));
 
 		while (true) {
 			QueueingConsumer.Delivery delivery = consumer.nextDelivery();

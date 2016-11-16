@@ -3,11 +3,11 @@ package br.org.cin.ufpe.IoTCommonsProject.naming;
 import br.org.cin.ufpe.IoTCommonsProject.naming.model.ServiceAddress;
 
 public interface NamingServiceInterface {
-	boolean registerService(ServiceAddress service);
+	boolean register(ServiceAddress service);
 
-	boolean unregisterService(String serviceName);
+	boolean unregister(String serviceName);
 
-	ServiceAddress findService(String findService);
+	ServiceAddress find(String findService);
 
-	boolean updateService(ServiceAddress service);
+	boolean update(ServiceAddress service);
 }

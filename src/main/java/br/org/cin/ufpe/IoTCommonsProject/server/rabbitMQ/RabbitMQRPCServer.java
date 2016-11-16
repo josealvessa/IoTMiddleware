@@ -1,9 +1,6 @@
 package br.org.cin.ufpe.IoTCommonsProject.server.rabbitMQ;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
@@ -12,74 +9,51 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-import br.org.cin.ufpe.IoTCommonsProject.dao.EntityDAO;
-import br.org.cin.ufpe.IoTCommonsProject.pojo.Entity;
+import br.org.cin.ufpe.IoTCommonsProject.common.Constants;
+import br.org.cin.ufpe.IoTCommonsProject.naming.model.Request;
+import br.org.cin.ufpe.IoTCommonsProject.naming.model.ServiceAddress;
+import br.org.cin.ufpe.IoTCommonsProject.pojo.ConnectionUtil;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Marshaller;
-import br.org.cin.ufpe.IoTCommonsProject.pojo.Response;
 
 public class RabbitMQRPCServer {
 
-	private String queueName = "rpc_queue";
+	private String queueName;
 	private ConnectionFactory factory;
-	private EntityDAO dao;
+	private RabbitMQRPCServerController controller;
 
-	public RabbitMQRPCServer(String queueName) {
-
-		factory = new ConnectionFactory();
-		factory.setUsername("vhostuser");
-		factory.setPassword("123456");
-
-		try {
-			factory.setUri("amqp://192.168.0.134:5672");
-		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		this.queueName = queueName;
-		this.dao = new EntityDAO();
-		// this.factory = factory;
+	public RabbitMQRPCServer(String queueName, ServiceAddress address) {
+		this.factory = ConnectionUtil.getConnectionFactory(address);
+		this.queueName = address.getExtras().get(Constants.QUEUE_NAME);
+		this.controller = new RabbitMQRPCServerController();
 	}
 
-	public void waitForAvailableConnections()
-			throws IOException, TimeoutException, InterruptedException, ClassNotFoundException {
+	public void init() throws IOException, TimeoutException, InterruptedException, ClassNotFoundException {
 
-		System.out.println(" [x] Awaiting RPC requests");
+		System.out.println("[Naming Service] Initializing Service");
 
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
 
 		channel.queueDeclare(queueName, false, false, false, null);
-
 		channel.basicQos(1);
 
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 		channel.basicConsume(queueName, false, consumer);
 
-		Marshaller<Entity> entityMarshaller = new Marshaller<Entity>();
-		Marshaller<Response> responseEntityMarshaller = new Marshaller<Response>();
+		Marshaller<Request> requestMarshaller = new Marshaller<Request>();
 
 		while (true)
 
 		{
 			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-
 			BasicProperties props = delivery.getProperties();
 			BasicProperties replyProps = new BasicProperties.Builder().correlationId(props.getCorrelationId()).build();
 
-			Entity entity = entityMarshaller.unmarshall(delivery.getBody());
-			dao.save(entity);
-			System.out.println("=> ReceivedEntity" + entity);
+			Request request = requestMarshaller.unmarshall(delivery.getBody());
+			byte[] response = this.controller.handleRequest(request);
 
-			channel.basicPublish("", props.getReplyTo(), replyProps,
-					responseEntityMarshaller.marshall(Response.getSuccessResponse()));
-
+			System.out.println("=> Request" + request);
+			channel.basicPublish("", props.getReplyTo(), replyProps, response);
 			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		}
 

@@ -9,18 +9,18 @@ import com.rabbitmq.client.QueueingConsumer;
 import br.org.cin.ufpe.IoTCommonsProject.listener.SubscriptionListener;
 import br.org.cin.ufpe.IoTCommonsProject.naming.model.ServiceAddress;
 import br.org.cin.ufpe.IoTCommonsProject.parser.ParserJson;
+import br.org.cin.ufpe.IoTCommonsProject.pojo.ConnectionUtil;
 
 public class RabbitMQConnection {
 
 	private Thread subscribeThread;
 	private ConnectionFactory factory;
-	private ServiceAddress address;
 
 	private static final String EXCHANGE = "amq.direct";
 	private static final String ROUTING_KEY = "si.test.queue";
 
-	public RabbitMQConnection(ConnectionFactory factory) {
-		this.factory = factory;
+	public RabbitMQConnection(ServiceAddress serviceAddress) {
+		this.factory = ConnectionUtil.getConnectionFactory(serviceAddress);
 	}
 
 	public void stopThread() {
