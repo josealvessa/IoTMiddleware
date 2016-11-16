@@ -1,9 +1,12 @@
 package br.org.cin.ufpe.IoTCommonsProject.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Attributes implements Serializable{
+import org.bson.Document;
+
+public class Attributes implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -52,6 +55,31 @@ public class Attributes implements Serializable{
 
 	public void setMetadas(List<Metadata> metadatas) {
 		this.metadatas = metadatas;
+	}
+
+	@Override
+	public String toString() {
+		return "Attributes [name=" + name + ", type=" + type + ", value=" + value + ", metadatas=" + metadatas + "]";
+	}
+
+	public Document getDocument() {
+		Document document = new Document();
+		document.append("name", this.name);
+		document.append("type", this.type);
+		document.append("value", this.value);
+
+		List<Document> list = new ArrayList<Document>();
+
+		if (metadatas != null && metadatas.size() > 0) {
+
+			for (Metadata metadata : metadatas) {
+				list.add(metadata.getDocument());
+			}
+
+		}
+
+		document.append("metadatas", list);
+		return document;
 	}
 
 }

@@ -1,9 +1,14 @@
 package br.org.cin.ufpe.IoTCommonsProject.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Entity implements Serializable {
+import org.bson.Document;
+
+import br.org.cin.ufpe.IoTCommonsProject.naming.model.DocumentInterface;
+
+public class Entity implements Serializable, DocumentInterface {
 
 	private static final long serialVersionUID = 1L;
 	private String id;
@@ -12,6 +17,10 @@ public class Entity implements Serializable {
 
 	public Entity() {
 		super();
+	}
+
+	public Entity(Document document) {
+
 	}
 
 	public String getType() {
@@ -37,5 +46,31 @@ public class Entity implements Serializable {
 	public void setAttributes(List<Attributes> attributes) {
 		this.attributes = attributes;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Entity [id=" + id + ", type=" + type + ", attributes=" + attributes + "]";
+	}
+
+	// TODO - Use GSON Instead. Not faster but simpler!
+	public Document getDocument() {
+
+		Document document = new Document();
+		document.append("id", this.id);
+		document.append("type", this.type);
+
+		List<Document> array = new ArrayList<Document>();
+
+		if (attributes != null && attributes.size() > 0) {
+			for (Attributes attributes : attributes) {
+				array.add(attributes.getDocument());
+			}
+
+		}
+
+		document.append("attributes", array);
+
+		return document;
+	}
+
 }

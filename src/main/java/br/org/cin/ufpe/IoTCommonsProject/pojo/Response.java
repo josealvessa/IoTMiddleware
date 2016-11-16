@@ -31,4 +31,10 @@ public class Response implements Serializable {
 
 		return response;
 	}
+
+	@Override
+	public String toString() {
+		return "Response [status=" + status + ", message=" + message + "]";
+	}
+
 }

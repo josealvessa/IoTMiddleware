@@ -4,13 +4,12 @@ import java.util.Dictionary;
 
 import org.bson.Document;
 
-public class ServiceAddress {
+public class ServiceAddress implements DocumentInterface {
 
 	private String name;
 	private String type;
 	private String host;
 	private int port;
-
 	private String user;
 	private String password;
 

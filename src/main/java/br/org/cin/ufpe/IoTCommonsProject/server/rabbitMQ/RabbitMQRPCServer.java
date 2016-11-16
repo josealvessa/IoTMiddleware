@@ -10,10 +10,9 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
-import com.rabbitmq.client.ShutdownSignalException;
 
+import br.org.cin.ufpe.IoTCommonsProject.dao.EntityDAO;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Entity;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Marshaller;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Response;
@@ -22,6 +21,7 @@ public class RabbitMQRPCServer {
 
 	private String queueName = "rpc_queue";
 	private ConnectionFactory factory;
+	private EntityDAO dao;
 
 	public RabbitMQRPCServer(String queueName) {
 
@@ -43,6 +43,7 @@ public class RabbitMQRPCServer {
 		}
 
 		this.queueName = queueName;
+		this.dao = new EntityDAO();
 		// this.factory = factory;
 	}
 
@@ -73,6 +74,7 @@ public class RabbitMQRPCServer {
 			BasicProperties replyProps = new BasicProperties.Builder().correlationId(props.getCorrelationId()).build();
 
 			Entity entity = entityMarshaller.unmarshall(delivery.getBody());
+			dao.save(entity);
 			System.out.println("=> ReceivedEntity" + entity);
 
 			channel.basicPublish("", props.getReplyTo(), replyProps,

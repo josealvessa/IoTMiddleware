@@ -1,5 +1,7 @@
 package br.org.cin.ufpe.IoTCommonsProject.pojo;
 
+import org.bson.Document;
+
 public class Metadata {
 	private String name;
 	private String type;
@@ -34,5 +36,13 @@ public class Metadata {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Document getDocument() {
+		Document document = new Document();
+		document.append("name", this.name);
+		document.append("type", this.type);
+		document.append("value", this.value);
+		return document;
 	}
 }
