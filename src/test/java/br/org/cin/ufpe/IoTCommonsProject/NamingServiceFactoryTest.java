@@ -28,8 +28,8 @@ public class NamingServiceFactoryTest {
 		address.setPort(4321);
 		address.setType("sensor");
 
-		boolean wasSavedWithSuccess = dao.save(address);
-		Assert.assertEquals(true, wasSavedWithSuccess);
+		String wasSavedWithSuccess = dao.save(address);
+		Assert.assertNotEquals(null, wasSavedWithSuccess);
 
 		ServiceAddress serviceAddressFromDatabase = dao.getServiceByName("producer");
 
@@ -50,8 +50,8 @@ public class NamingServiceFactoryTest {
 		address.setPort(4321);
 		address.setType("sensor");
 
-		boolean wasSavedWithSuccess = dao.save(address);
-		Assert.assertEquals(true, wasSavedWithSuccess);
+		String wasSavedWithSuccess = dao.save(address);
+		Assert.assertNotEquals(null, wasSavedWithSuccess);
 
 		dao.clear();
 
@@ -71,8 +71,8 @@ public class NamingServiceFactoryTest {
 		address.setPort(4321);
 		address.setType("sensor");
 
-		boolean wasSavedWithSuccess = dao.save(address);
-		Assert.assertEquals(true, wasSavedWithSuccess);
+		String wasSavedWithSuccess = dao.save(address);
+		Assert.assertNotEquals(null, wasSavedWithSuccess);
 
 		ServiceAddress address2 = new ServiceAddress();
 		address2.setHost("localhost2");
@@ -80,8 +80,8 @@ public class NamingServiceFactoryTest {
 		address2.setPort(43212);
 		address2.setType("sensor2");
 
-		boolean wasSavedWithSuccess2 = dao.save(address);
-		Assert.assertEquals(true, wasSavedWithSuccess2);
+		String wasSavedWithSuccess2 = dao.save(address);
+		Assert.assertNotEquals(null, wasSavedWithSuccess2);
 
 		List<ServiceAddress> serviceAddressFromDatabase = dao.getAllService();
 

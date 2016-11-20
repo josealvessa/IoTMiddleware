@@ -11,7 +11,7 @@ import br.org.cin.ufpe.IoTCommonsProject.pojo.Marshaller;
 public class NameServiceController implements NamingServiceInterface {
 
 	public boolean register(ServiceAddress service) {
-		return NameServiceDAO.getDAO().save(service);
+		return NameServiceDAO.getDAO().save(service) != null;
 	}
 
 	public boolean unregister(String serviceName) {

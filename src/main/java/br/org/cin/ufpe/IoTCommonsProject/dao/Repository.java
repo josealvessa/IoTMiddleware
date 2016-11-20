@@ -35,12 +35,12 @@ public class Repository implements RepositoryInterface {
 		}
 	}
 
-	public boolean save(DocumentInterface service) {
+	public String save(DocumentInterface service) {
 
 		Document document = service.getDocument();
 		this.db.getCollection(collectionName).insertOne(document);
 
-		return document.get("_id") != null;
+		return document.getObjectId("_id").toHexString();
 	}
 
 	public boolean removeByField(String value) {

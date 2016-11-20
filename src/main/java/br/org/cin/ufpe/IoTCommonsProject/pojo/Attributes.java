@@ -22,7 +22,19 @@ public class Attributes implements Serializable {
 		this.setMetadas(metadatas);
 	}
 
-	public Attributes() {
+	public Attributes(Document document) {
+		this.name = document.getString("name");
+		this.type = document.getString("type");
+		this.value = document.getString("value");
+
+		List<Document> metadataList = document.get("metadatas", List.class);
+		this.metadatas = new ArrayList<Metadata>();
+
+		if (metadataList != null && !metadataList.isEmpty()) {
+			for (Document attributeDocument : metadataList) {
+				this.metadatas.add(new Metadata(attributeDocument));
+			}
+		}
 	}
 
 	public String getName() {

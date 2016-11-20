@@ -20,7 +20,7 @@ public class RabbitMQRPCClient {
 
 	private Connection connection;
 	private Channel channel;
-	private String requestQueueName = "rpc_queue";
+	private String requestQueueName = "";
 	private String replyQueueName;
 	private QueueingConsumer consumer;
 	private ConnectionFactory factory;

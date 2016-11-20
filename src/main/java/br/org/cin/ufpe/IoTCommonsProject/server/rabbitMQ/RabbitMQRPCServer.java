@@ -21,13 +21,13 @@ public class RabbitMQRPCServer {
 	private ConnectionFactory factory;
 	private RabbitMQRPCServerController controller;
 
-	public RabbitMQRPCServer(String queueName, ServiceAddress address) {
+	public RabbitMQRPCServer(ServiceAddress address) {
 		this.factory = ConnectionUtil.getConnectionFactory(address);
 		this.queueName = address.getExtras().get(Constants.QUEUE_NAME);
 		this.controller = new RabbitMQRPCServerController();
 	}
 
-	public void init() throws IOException, TimeoutException, InterruptedException, ClassNotFoundException {
+	public void waitForConnections() throws IOException, TimeoutException, InterruptedException, ClassNotFoundException {
 
 		System.out.println("[Naming Service] Initializing Service");
 
@@ -56,6 +56,6 @@ public class RabbitMQRPCServer {
 			channel.basicPublish("", props.getReplyTo(), replyProps, response);
 			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 		}
-
+		
 	}
 }

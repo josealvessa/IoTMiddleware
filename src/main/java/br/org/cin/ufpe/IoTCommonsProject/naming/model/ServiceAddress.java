@@ -1,6 +1,6 @@
 package br.org.cin.ufpe.IoTCommonsProject.naming.model;
 
-import java.util.Dictionary;
+import java.util.HashMap;
 
 import org.bson.Document;
 
@@ -12,8 +12,7 @@ public class ServiceAddress implements DocumentInterface {
 	private int port;
 	private String user;
 	private String password;
-
-	private Dictionary<String, String> extras;
+	private HashMap<String, String> extras;
 
 	public ServiceAddress() {
 		super();
@@ -91,12 +90,11 @@ public class ServiceAddress implements DocumentInterface {
 		this.password = password;
 	}
 
-	public Dictionary<String, String> getExtras() {
+	public HashMap<String, String> getExtras() {
 		return extras;
 	}
 
-	public void setExtras(Dictionary<String, String> extras) {
+	public void setExtras(HashMap<String, String> extras) {
 		this.extras = extras;
 	}
-
 }

@@ -7,6 +7,7 @@ public class Response implements Serializable {
 	private static final long serialVersionUID = 3766221263633246881L;
 	private int status;
 	private String message;
+	private byte[] payload;
 
 	public int getStatus() {
 		return status;
@@ -30,6 +31,14 @@ public class Response implements Serializable {
 		response.setMessage("Success");
 
 		return response;
+	}
+
+	public byte[] getPayload() {
+		return payload;
+	}
+
+	public void setPayload(byte[] payload) {
+		this.payload = payload;
 	}
 
 	@Override

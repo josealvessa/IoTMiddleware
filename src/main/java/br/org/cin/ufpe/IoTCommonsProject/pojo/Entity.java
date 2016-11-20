@@ -19,10 +19,6 @@ public class Entity implements Serializable, DocumentInterface {
 		super();
 	}
 
-	public Entity(Document document) {
-
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -65,12 +61,40 @@ public class Entity implements Serializable, DocumentInterface {
 			for (Attributes attributes : attributes) {
 				array.add(attributes.getDocument());
 			}
-
 		}
 
 		document.append("attributes", array);
 
 		return document;
+	}
+
+	public Document getSeachableDocument() {
+
+		Document document = new Document();
+
+		if (this.id != null) {
+			document.append("_id", this.id);
+		}
+
+		if (this.type != null) {
+			document.append("type", this.type);
+		}
+
+		return document;
+	}
+
+	public Entity(Document document) {
+		this.id = document.getObjectId("_id").toHexString();
+		this.type = document.getString("type");
+
+		List<Document> attributes = document.get("attributes", List.class);
+		this.attributes = new ArrayList<Attributes>();
+
+		if (attributes != null && !attributes.isEmpty()) {
+			for (Document attributeDocument : attributes) {
+				this.attributes.add(new Attributes(attributeDocument));
+			}
+		}
 	}
 
 }
