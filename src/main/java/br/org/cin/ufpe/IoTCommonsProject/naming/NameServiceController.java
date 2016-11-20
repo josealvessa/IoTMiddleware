@@ -38,7 +38,7 @@ public class NameServiceController implements NamingServiceInterface {
 		switch (operation) {
 
 		case NamingServiceContract.REGISTER:
-			serviceAddressMarshaller = new Marshaller<>();
+			serviceAddressMarshaller = new Marshaller<ServiceAddress>();
 			addressToRegister = serviceAddressMarshaller.unmarshall(request.getPayload());
 			boolean registedWithSuccess = register(addressToRegister);
 			response = new byte[] { (byte) (registedWithSuccess ? 1 : 0) };
@@ -52,11 +52,11 @@ public class NameServiceController implements NamingServiceInterface {
 		case NamingServiceContract.FIND:
 			serviceName = new String(request.getPayload());
 			ServiceAddress serviceAddress = find(serviceName);
-			serviceAddressMarshaller = new Marshaller<>();
+			serviceAddressMarshaller = new Marshaller<ServiceAddress>();
 			response = serviceAddressMarshaller.marshall(serviceAddress);
 			break;
 		case NamingServiceContract.UPDATE:
-			serviceAddressMarshaller = new Marshaller<>();
+			serviceAddressMarshaller = new Marshaller<ServiceAddress>();
 			addressToRegister = serviceAddressMarshaller.unmarshall(request.getPayload());
 			boolean updatedWithSuccess = update(addressToRegister);
 			response = new byte[] { (byte) (updatedWithSuccess ? 1 : 0) };

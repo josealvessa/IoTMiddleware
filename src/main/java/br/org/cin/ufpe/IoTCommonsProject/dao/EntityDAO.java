@@ -8,6 +8,7 @@ import org.bson.Document;
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
+import br.org.cin.ufpe.IoTCommonsProject.parser.DocumentParser;
 import br.org.cin.ufpe.IoTCommonsProject.pojo.Entity;
 
 public class EntityDAO extends Repository {
@@ -24,7 +25,7 @@ public class EntityDAO extends Repository {
 
 	public Entity find(Entity entity) {
 		FindIterable<Document> iterable = db.getCollection(collectionName).find(entity.getSeachableDocument());
-		return new Entity(iterable.first());
+		return DocumentParser.parseEntity(iterable.first());
 	}
 
 	public List<Entity> discover(Entity entity) {
@@ -33,7 +34,7 @@ public class EntityDAO extends Repository {
 
 		iterable.forEach(new Block<Document>() {
 			public void apply(final Document document) {
-				entities.add(new Entity(document));
+				entities.add(DocumentParser.parseEntity(document));
 			}
 		});
 

@@ -14,12 +14,6 @@ public class Metadata {
 		this.value = value;
 	}
 
-	public Metadata(Document document) {
-		this.name = document.getString("name");
-		this.type = document.getString("type");
-		this.value = document.getString("value");
-	}
-
 	public String getName() {
 		return name;
 	}

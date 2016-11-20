@@ -15,6 +15,13 @@ public class Entity implements Serializable, DocumentInterface {
 	private String type;
 	private List<Attributes> attributes;
 
+	public Entity(String id, String type, List<Attributes> attributes) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.attributes = attributes;
+	}
+
 	public Entity() {
 		super();
 	}
@@ -82,19 +89,4 @@ public class Entity implements Serializable, DocumentInterface {
 
 		return document;
 	}
-
-	public Entity(Document document) {
-		this.id = document.getObjectId("_id").toHexString();
-		this.type = document.getString("type");
-
-		List<Document> attributes = document.get("attributes", List.class);
-		this.attributes = new ArrayList<Attributes>();
-
-		if (attributes != null && !attributes.isEmpty()) {
-			for (Document attributeDocument : attributes) {
-				this.attributes.add(new Attributes(attributeDocument));
-			}
-		}
-	}
-
 }
