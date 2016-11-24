@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
-import br.org.cin.ufpe.IoTMiddleware.common.Constants;
-import br.org.cin.ufpe.IoTMiddleware.naming.model.ServiceAddress;
-import br.org.cin.ufpe.IoTMiddleware.server.Server;
+import br.org.cin.ufpe.middleware.common.Constants;
+import br.org.cin.ufpe.middleware.naming.model.ServiceAddress;
+import br.org.cin.ufpe.middleware.server.Server;
 
 public class App {
 

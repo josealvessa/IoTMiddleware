@@ -22,6 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/IoTMiddleware/target/iotmiddlware-jar-with-dependencies.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IoTMiddleware"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

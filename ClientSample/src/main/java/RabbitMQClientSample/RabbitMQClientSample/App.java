@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import br.org.cin.ufpe.IoTMiddleware.client.ClientController;
-import br.org.cin.ufpe.IoTMiddleware.common.Constants;
-import br.org.cin.ufpe.IoTMiddleware.listener.SubscriptionListener;
-import br.org.cin.ufpe.IoTMiddleware.naming.model.ServiceAddress;
-import br.org.cin.ufpe.IoTMiddleware.pojo.Attributes;
-import br.org.cin.ufpe.IoTMiddleware.pojo.Entity;
+import br.org.cin.ufpe.middleware.client.ClientController;
+import br.org.cin.ufpe.middleware.common.Constants;
+import br.org.cin.ufpe.middleware.listener.SubscriptionListener;
+import br.org.cin.ufpe.middleware.naming.model.ServiceAddress;
+import br.org.cin.ufpe.middleware.pojo.Attributes;
+import br.org.cin.ufpe.middleware.pojo.Entity;
 
 public class App {
 	public static void main(String[] args) throws Throwable {
@@ -31,12 +31,12 @@ public class App {
 			nameServiceAddress.setExtras(extras);
 
 			List<Attributes> attributes = new ArrayList<Attributes>();
-			Attributes attribute = new Attributes("Temperature", "String", "43", null);
+			Attributes attribute = new Attributes("lumens", "String", "43", null);
 			attributes.add(attribute);
 
 			Entity entity = new Entity();
 			entity.setAttributes(attributes);
-			entity.setType("TEMPERATURE");
+			entity.setType("luminosity");
 
 			ClientController controller = new ClientController(nameServiceAddress);
 			Entity registeredEntity = controller.register(entity);

@@ -28,7 +28,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/IoTMiddleware/target/iotmiddlware-jar-with-dependencies.jar">
+	<classpathentry kind="lib" path="/IoTMiddleware/target/iotmiddlware-jar-with-dependencies.jar" sourcepath="/IoTMiddleware">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
